@@ -50,3 +50,4 @@ site
 # vscode database functionality support files
 *.session.sql
 env.sh
+demo/get-pip.py
