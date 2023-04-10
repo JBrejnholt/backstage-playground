@@ -30,15 +30,29 @@ import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
 
 import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
-import { createApp } from '@backstage/app-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { DemoPluginPage } from '@internal/plugin-demo-plugin';
+import { createApp } from '@backstage/app-defaults';
+import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import LightIcon from '@material-ui/icons/WbSunny';
 
 const app = createApp({
   apis,
+  themes: [{
+    id: 'my-theme',
+    title: 'My Custom Theme',
+    variant: 'light',
+    icon: <LightIcon />,
+    Provider: ({ children }) => (
+      <ThemeProvider theme={myTheme}>
+        <CssBaseline>{children}</CssBaseline>
+      </ThemeProvider>
+    ),
+  }],
   components: {
     SignInPage: props => (
       <SignInPage
@@ -86,7 +100,7 @@ const routes = (
       element={<TechDocsReaderPage />}
     >
       <TechDocsAddons>
-        <ReportIssue />
+        <ReportIssue />     
       </TechDocsAddons>
     </Route>
     <Route path="/create" element={<ScaffolderPage />} />
@@ -111,6 +125,87 @@ const routes = (
     <Route path="/demo-plugin" element={<DemoPluginPage />} />
   </FlatRoutes>
 );
+
+import {
+  createTheme,
+  genPageTheme,
+  lightTheme,
+  shapes,
+} from '@backstage/theme';
+
+const myTheme = createTheme({
+  palette: {
+    ...lightTheme.palette,
+    primary: {
+      main: '#031329',
+    },
+    secondary: {
+      main: '#1b73ee',
+    },
+    error: {
+      main: '#F44336',
+    },
+    warning: {
+      main: '#FFC107',
+    },
+    info: {
+      main: '#031329',
+    },
+    success: {
+      main: '#4CAF50',
+    },
+    background: {
+      default: '#F8F9FA',
+      paper: '#FFFFFF',
+    },
+    banner: {
+      info: '#031329',
+      error: '#F44336',
+      text: '#343b58',
+      link: '#565a6e',
+    },
+    errorBackground: '#F44336',
+    warningBackground: '#FFC107',
+    infoBackground: '#031329',
+    navigation: {
+      background: '#031329',
+      indicator: '#F44336',
+      color: '#FFFFFF',
+      selectedColor: '#FFFFFF',
+    },
+  },
+  defaultPageTheme: 'home',
+  fontFamily: 'Arial',
+  /* below drives the header colors */
+  pageTheme: {
+    home: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.wave }),
+    documentation: genPageTheme({
+      colors: ['#031329', '#1b73ee'],
+      shape: shapes.wave2,
+    }),
+    tool: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.round }),
+    service: genPageTheme({
+      colors: ['#031329', '#1b73ee'],
+      shape: shapes.wave,
+    }),
+    website: genPageTheme({
+      colors: ['#031329', '#1b73ee'],
+      shape: shapes.wave,
+    }),
+    library: genPageTheme({
+      colors: ['#031329', '#1b73ee'],
+      shape: shapes.wave,
+    }),
+    other: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.wave }),
+    app: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.wave }),
+    apis: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.wave }),
+    settings: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.round }),
+    search: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.round }),
+    component: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.round }),
+    team: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.round }),
+    about: genPageTheme({ colors: ['#031329', '#1b73ee'], shape: shapes.round }),
+  },
+});
 
 export default app.createRoot(
   <>
